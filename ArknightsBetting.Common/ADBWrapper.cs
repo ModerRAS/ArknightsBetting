@@ -24,8 +24,7 @@ namespace ArknightsBetting.Common {
         }
 
         public void CaptureScreenshot(string savePath) {
-            ExecuteAdbCommand($"shell screencap -p > /sdcard/screenshot.png");
-            ExecuteAdbCommand($"pull /sdcard/screenshot.png {savePath}");
+            ExecuteAdbCommand($"exec-out screencap -p", savePath);
         }
 
         public void Swipe(int startX, int startY, int endX, int endY) {
@@ -42,14 +41,15 @@ namespace ArknightsBetting.Common {
             Process process = new Process();
             process.StartInfo.FileName = adbPath;
             process.StartInfo.Arguments = args;
+            process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
             process.Start();
 
             if (!string.IsNullOrEmpty(savePath)) {
-                MemoryStream memoryStream = new MemoryStream();
-                process.StandardOutput.BaseStream.CopyTo(memoryStream);
-                File.WriteAllBytes(savePath, memoryStream.ToArray());
+                using (var fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write)) {
+                    process.StandardOutput.BaseStream.CopyTo(fileStream);
+                }
             }
 
             process.WaitForExit();
