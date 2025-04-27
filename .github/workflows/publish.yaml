@@ -27,9 +27,9 @@ jobs:
         run: dotnet publish -c Release -r win-x64 --self-contained true # 根据你的目标平台调整
 
       - name: Package application
-        shell: bash
+        shell: pwsh
         run: |
-          cd ${{ github.workspace }}/ArknightsBetting.Avalonia/bin/Release/net8.0/win-x64/publish
+          cd ${{ github.workspace }}\ArknightsBetting.Avalonia\bin\Release\net8.0\win-x64\publish\
           zip -r ${{ github.workspace }}/pre-release.zip .
 
       - name: Create GitHub Pre-Release
