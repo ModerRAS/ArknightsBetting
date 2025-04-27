@@ -11,6 +11,7 @@ namespace ArknightsBetting.Common {
         public AdbWrapper adbWrapper { get; set; }
         public MainLogic(string adbPath, string deviceSerial) {
             adbWrapper = new AdbWrapper(adbPath, deviceSerial);
+            saveName = deviceSerial.Replace(":", "_").Replace(".", "_");
         }
         public string saveName { get; set; }
         public MainLogic(string deviceSerial) {
@@ -42,14 +43,14 @@ namespace ArknightsBetting.Common {
                     }
                 }
                 if (detect.Contains("WIN") && detect.Contains("LOSE")) {
-                    await File.WriteAllBytesAsync($"{saveName}_{time.ToString("yyyyMMddHHmmss")}_Result", jpg);
+                    await File.WriteAllBytesAsync($"{saveName}_{time.ToString("yyyyMMddHHmmss")}_Result.jpg", jpg);
                     time = DateTime.Now;
                     continue;
                 }
                 if (detect.Contains("本轮观望")) {
                     var p1 = detect.GetStringPoint("本轮观望");
                     adbWrapper.Tap(p1.X, p1.Y);
-                    await File.WriteAllBytesAsync($"{saveName}_{time.ToString("yyyyMMddHHmmss")}_Start", jpg);
+                    await File.WriteAllBytesAsync($"{saveName}_{time.ToString("yyyyMMddHHmmss")}_Start.jpg", jpg);
                     continue;
                 }
             }
