@@ -30,7 +30,7 @@ jobs:
         shell: pwsh
         run: |
           cd ${{ github.workspace }}\ArknightsBetting.Avalonia\bin\Release\net8.0\win-x64\publish\
-          zip -r ${{ github.workspace }}/pre-release.zip .
+          Compress-Archive -Path ".\*" -DestinationPath "${{ github.workspace }}\pre-release.zip"
 
       - name: Create GitHub Pre-Release
         uses: actions/github-script@v7
