@@ -27,6 +27,10 @@ namespace ArknightsBetting.Common {
             ExecuteAdbCommand($"exec-out screencap -p", savePath);
         }
 
+        public byte[] CaptureScreenshot() {
+            return ExecuteAdbCommandToBytes($"exec-out screencap -p");
+        }
+
         public void Swipe(int startX, int startY, int endX, int endY) {
             ExecuteAdbCommand($"shell input swipe {startX} {startY} {endX} {endY}");
         }
@@ -53,6 +57,26 @@ namespace ArknightsBetting.Common {
             }
 
             process.WaitForExit();
+        }
+
+        private byte[] ExecuteAdbCommandToBytes(string command) {
+            string args = $"{(deviceSerial != null ? "-s " + deviceSerial : "")} {command}";
+
+            using (Process process = new Process()) {
+                process.StartInfo.FileName = adbPath;
+                process.StartInfo.Arguments = args;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true; // 可选，调试用
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+
+                using (var memoryStream = new MemoryStream()) {
+                    process.StandardOutput.BaseStream.CopyTo(memoryStream);
+                    process.WaitForExit();
+                    return memoryStream.ToArray();
+                }
+            }
         }
 
         private string[] GetConnectedDevices() {

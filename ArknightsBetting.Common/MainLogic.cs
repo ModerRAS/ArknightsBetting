@@ -31,8 +31,7 @@ namespace ArknightsBetting.Common {
             var time = DateTime.Now;
             while (true) {
                 await Task.Delay(500);
-                adbWrapper.CaptureScreenshot($"{saveName}.jpg");
-                var jpg = await File.ReadAllBytesAsync($"{saveName}.jpg");
+                var jpg = adbWrapper.CaptureScreenshot();
                 detect.SetImage(jpg);
                 foreach (var e in detect.GetStringPoints("加入赛事")) {
                     adbWrapper.Tap(e.X, e.Y);
