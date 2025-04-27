@@ -32,32 +32,8 @@ jobs:
           cd ${{ github.workspace }}\ArknightsBetting.Avalonia\bin\Release\net8.0\win-x64\publish\
           Compress-Archive -Path ".\*" -DestinationPath "${{ github.workspace }}\pre-release.zip"
 
-      - name: Create GitHub Pre-Release
-        uses: actions/github-script@v7
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const now = new Date();
-            const timestamp = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}-${now.getHours()}.${now.getMinutes()}.${now.getSeconds()}`;
-            const tagName = `pre-release-${timestamp}-${context.sha.substring(0, 7)}`; // 包含时间戳和短 SHA
-            const releaseName = `Pre-release ${timestamp}`;
-
-            const { data: release } = await github.rest.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: tagName,
-              name: releaseName,
-              body: `自动构建的预发布版本 ${tagName}`,
-              draft: false,
-              prerelease: true // 设置为预发布
-            });
-            console.log(`Created pre-release ${release.html_url}`);
-            core.setOutput('upload_url', release.upload_url);
-
-      - name: Upload Pre-Release Asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.github-release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/pre-release.zip
-          asset_name: ${{ github.event.repository.name }}-win-x64-pre-release-${{ steps.github-release.outputs.release_id }}.zip
-          asset_content_type: application/zip
+          name: AB
+          path: ${{ github.workspace }}\ArknightsBetting.Avalonia\bin\Release\net8.0\win-x64\publish\
