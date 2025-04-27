@@ -29,7 +29,7 @@ jobs:
       - name: Package application
         shell: bash
         run: |
-          cd ${{ github.workspace }}/bin/Release/net8.0/win-x64/publish
+          cd ${{ github.workspace }}/ArknightsBetting.Avalonia/bin/Release/net8.0/win-x64/publish
           zip -r ${{ github.workspace }}/pre-release.zip .
 
       - name: Create GitHub Pre-Release
