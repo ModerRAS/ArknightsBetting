@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArknightsBetting.Avalonia", "ArknightsBetting.Avalonia\ArknightsBetting.Avalonia.csproj", "{E2117A91-0B72-4C4D-A0DC-C9D3D010BC74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArknightsBetting.Avalonia", "ArknightsBetting.Avalonia\ArknightsBetting.Avalonia.csproj", "{E2117A91-0B72-4C4D-A0DC-C9D3D010BC74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArknightsBetting.Common", "ArknightsBetting.Common\ArknightsBetting.Common.csproj", "{F743BAED-1B4A-42F0-82AE-0B555D6DF9E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArknightsBetting.Common", "ArknightsBetting.Common\ArknightsBetting.Common.csproj", "{F743BAED-1B4A-42F0-82AE-0B555D6DF9E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArknightsBetting.Cli", "ArknightsBetting.Cli\ArknightsBetting.Cli.csproj", "{F271CE3D-2665-40A3-8CF6-C280B89109BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F743BAED-1B4A-42F0-82AE-0B555D6DF9E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F743BAED-1B4A-42F0-82AE-0B555D6DF9E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F743BAED-1B4A-42F0-82AE-0B555D6DF9E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F271CE3D-2665-40A3-8CF6-C280B89109BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F271CE3D-2665-40A3-8CF6-C280B89109BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F271CE3D-2665-40A3-8CF6-C280B89109BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F271CE3D-2665-40A3-8CF6-C280B89109BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -26,14 +26,13 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -r win-x64 --self-contained true # 根据你的目标平台调整
 
-      - name: Package application
-        shell: pwsh
-        run: |
-          cd ${{ github.workspace }}\ArknightsBetting.Avalonia\bin\Release\net8.0\win-x64\publish\
-          Compress-Archive -Path ".\*" -DestinationPath "${{ github.workspace }}\pre-release.zip"
-
-      - name: Upload artifact
+      - name: Upload artifact ArknightsBetting Avalonia
         uses: actions/upload-artifact@v4
         with:
-          name: AB
+          name: ABA
           path: ${{ github.workspace }}\ArknightsBetting.Avalonia\bin\Release\net8.0\win-x64\publish\
+      - name: Upload artifact ArknightsBetting Cli
+        uses: actions/upload-artifact@v4
+        with:
+          name: ABC
+          path: ${{ github.workspace }}\ArknightsBetting.Cli\bin\Release\net8.0\win-x64\publish\
