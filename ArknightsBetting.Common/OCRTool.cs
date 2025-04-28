@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using Sdcb.PaddleOCR.Models.Online;
 
 namespace ArknightsBetting.Common {
-    public class DetectNumber {
+    public class OCRTool {
         public PaddleOcrAll all { get; set; }
-        public DetectNumber() {
+        public OCRTool() {
             InitModel().Wait();
         }
         public async Task InitModel() {
@@ -30,9 +30,20 @@ namespace ArknightsBetting.Common {
                 return result;
             }
         }
+        public PaddleOcrResult GetOcrResult(Mat image) {
+            PaddleOcrResult result = all.Run(image);
+            return result;
+        }
         public PaddleOcrResult Result { get; set; }
         public void SetImage(byte[] image) {
             Result = GetOcrResult(image);
+        }
+        public string GetText(Mat image) {
+            Result = GetOcrResult(image);
+            foreach (var e in Result.Regions) {
+
+            }
+            return string.Empty;
         }
         public Point GetStringPoint(string str) { 
             foreach (var region in Result.Regions) {
