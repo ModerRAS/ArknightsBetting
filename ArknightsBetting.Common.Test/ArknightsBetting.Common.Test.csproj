@@ -25,6 +25,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="testdata\192_168_121_146_5555_20250429103944_Start.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="testdata\192_168_121_146_5555_20250429104339_Start.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="testdata\192_168_121_146_5555_20250429104414_Start.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="testdata\192_168_121_147_5555_20250428154920_Start.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
