@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Sdcb.PaddleOCR.Models.Online;
 
 namespace ArknightsBetting.Common {
-    public class OCRTool {
+    public class OCRTool : IDisposable {
         public PaddleOcrAll all { get; set; }
         public OCRTool() {
             InitModel().Wait();
@@ -23,6 +23,9 @@ namespace ArknightsBetting.Common {
                 AllowRotateDetection = true, /* 允许识别有角度的文字 */
                 Enable180Classification = false, /* 允许识别旋转角度大于90度的文字 */
             };
+        }
+        public void Dispose() {
+            all.Dispose();
         }
         public PaddleOcrResult GetOcrResult(byte[] image) {
             using (Mat src = Cv2.ImDecode(image, ImreadModes.Color)) {
@@ -40,10 +43,7 @@ namespace ArknightsBetting.Common {
         }
         public string GetText(Mat image) {
             Result = GetOcrResult(image);
-            foreach (var e in Result.Regions) {
-
-            }
-            return string.Empty;
+            return Result.Text;
         }
         public Point GetStringPoint(string str) { 
             foreach (var region in Result.Regions) {

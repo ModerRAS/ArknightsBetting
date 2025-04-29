@@ -28,7 +28,7 @@ namespace ArknightsBetting.Common {
             if (!Directory.Exists($"Captures/{saveName}")) {
                 Directory.CreateDirectory($"Captures/{saveName}");
             }
-            var detect = new OCRTool();
+            using var detect = new OCRTool();
             var time = DateTime.Now;
             while (true) {
                 await Task.Delay(500);
