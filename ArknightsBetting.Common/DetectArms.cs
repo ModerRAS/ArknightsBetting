@@ -18,7 +18,7 @@ namespace ArknightsBetting.Common {
         /// <param name="scale">放大倍数（推荐 2~3）</param>
         /// <param name="applyDilation">是否进行膨胀操作（用于断笔连通）</param>
         /// <returns>预处理后的Mat（二值图）</returns>
-        public static Mat PreprocessForOCR(Mat src, double scale = 20.0, bool applyDilation = false) {
+        public static Mat PreprocessForOCR(Mat src, double scale = 20.0, bool applyDilation = true) {
             if (src.Empty())
                 throw new ArgumentException("输入图像为空！");
 
@@ -118,7 +118,7 @@ namespace ArknightsBetting.Common {
             for (int i = 0; i < subMats.Count; i++)
             {
                 try {
-                    var tmp = ExtractWhiteByHSV(PreprocessForOCR(subMats[i]));
+                    var tmp = ExtractWhiteByHSV(subMats[i]);
                     Cv2.ImWrite(i + ".png", tmp); // 保存裁剪后的图像以供调试
                     var text = ocr.GetText(tmp);
                     var number = GetNumber(text);

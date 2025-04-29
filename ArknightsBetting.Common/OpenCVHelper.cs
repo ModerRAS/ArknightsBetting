@@ -4,6 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 namespace ArknightsBetting.Common;
+public class DetectedObject {
+    public Mat Image { get; set; }  // 对象图像
+    public Rect Position { get; set; } // 在原图中的位置
+}
 public static class OpenCVHelper {
     static OpenCVHelper() {
         for (int i = 1; i < 10; i++) {
@@ -51,7 +55,96 @@ public static class OpenCVHelper {
         // 返回对应的数字
         return templateImages.ElementAt(bestMatchIndex).Key;
     }
+    public static List<DetectedObject> SplitObjectsWithPosition(Mat inputImage, int minArea = 1) {
+        // 灰度转换
+        using Mat gray = new Mat();
+        Cv2.CvtColor(inputImage, gray, ColorConversionCodes.BGR2GRAY);
 
+        // 二值化处理
+        using Mat binary = new Mat();
+        Cv2.Threshold(gray, binary, 0, 255, ThresholdTypes.BinaryInv | ThresholdTypes.Otsu);
+
+        // 查找轮廓
+        Point[][] contours;
+        HierarchyIndex[] hierarchy;
+        Cv2.FindContours(
+            binary,
+            out contours,
+            out hierarchy,
+            RetrievalModes.External,
+            ContourApproximationModes.ApproxSimple);
+
+        List<DetectedObject> results = new List<DetectedObject>();
+
+        foreach (var contour in contours) {
+            // 面积过滤
+            double area = Cv2.ContourArea(contour);
+            if (area < minArea) continue;
+
+            // 获取包围矩形
+            Rect rect = Cv2.BoundingRect(contour);
+
+            // 创建对象掩膜
+            using Mat mask = new Mat(inputImage.Size(), MatType.CV_8UC1, Scalar.Black);
+            Cv2.DrawContours(mask, new[] { contour }, 0, Scalar.White, -1);
+
+            // 提取并裁剪对象
+            Mat objImage = new Mat(inputImage.Size(), inputImage.Type(), Scalar.Black);
+            inputImage.CopyTo(objImage, mask);
+            Mat cropped = new Mat(objImage, rect);
+
+            // 存储结果（注意克隆图像数据）
+            results.Add(new DetectedObject {
+                Image = cropped.Clone(), // 必须克隆，否则释放mask后数据会失效
+                Position = rect
+            });
+        }
+        return results;
+    }
+    public static List<Mat> SplitObjects(Mat inputImage, int minArea = 1) {
+        // 转换为灰度图像
+        using Mat gray = new Mat();
+        Cv2.CvtColor(inputImage, gray, ColorConversionCodes.BGR2GRAY);
+
+        // 二值化处理（确保黑底白字）
+        using Mat binary = new Mat();
+        Cv2.Threshold(gray, binary, 0, 255, ThresholdTypes.BinaryInv | ThresholdTypes.Otsu);
+
+        // 查找轮廓
+        Point[][] contours;
+        HierarchyIndex[] hierarchy;
+        Cv2.FindContours(
+            binary,
+            out contours,
+            out hierarchy,
+            RetrievalModes.External,
+            ContourApproximationModes.ApproxSimple);
+
+        List<Mat> objects = new List<Mat>();
+
+        foreach (var contour in contours) {
+            // 过滤小面积区域
+            double area = Cv2.ContourArea(contour);
+            if (area < minArea) continue;
+
+            // 创建对象掩膜
+            Mat mask = Mat.Zeros(binary.Size(), MatType.CV_8UC1);
+            Cv2.DrawContours(mask, new[] { contour }, 0, Scalar.White, -1);
+
+            // 提取原始图像中的对象
+            Mat result = new Mat();
+            inputImage.CopyTo(result, mask);
+
+            // 获取边界框并裁剪
+            Rect rect = Cv2.BoundingRect(contour);
+            Mat cropped = new Mat(result, rect);
+
+            objects.Add(cropped);
+        }
+
+
+        return objects;
+    }
     static int FindBestMatchingTemplate(Mat sourceImage) {
         // 记录每张模板图像的匹配结果
         Dictionary<int, double> matchScores = new ();
